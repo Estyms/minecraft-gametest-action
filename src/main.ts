@@ -1,5 +1,5 @@
-import * as core from '@actions/core'
-import { run } from './app'
+const core = require('@actions/core')
+const run = require('./app')
 
 const main = async (): Promise<void> => {
   

@@ -1,5 +1,5 @@
-import Docker from "dockerode"
-import semverSort from "semver-sort"
+const Docker = require("dockerode");
+const semverSort = require("semver-sort");
 
 async function getMods(mcVersion: string) {
 
@@ -59,13 +59,13 @@ async function runDocker(inputs: Inputs) : Promise<boolean> {
     return res[0].StatusCode == 0
 }
 
-export interface Inputs {
+interface Inputs {
     version: string,
     modPath: string,
     serverPropertiesPath?: string,
     configPath?: string
 }
 
-export async function run(inputs: Inputs): Promise<boolean> {
+module.exports.default = async function run(inputs: Inputs): Promise<boolean> {
     return await runDocker(inputs)
 }
