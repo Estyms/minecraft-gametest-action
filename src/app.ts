@@ -66,6 +66,6 @@ interface Inputs {
     configPath?: string
 }
 
-module.exports.default = async function run(inputs: Inputs): Promise<boolean> {
+module.exports = async function run(inputs: Inputs): Promise<boolean> {
     return await runDocker(inputs)
 }
