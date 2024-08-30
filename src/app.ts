@@ -36,7 +36,7 @@ async function getMods(mcVersion: string) {
 
 async function runDocker(inputs: Inputs) : Promise<boolean> {
     let dck = new Docker();
-    await dck.getImage("itzg/minecraft-server:java21-alpine");
+    await dck.pull("itzg/minecraft-server:java21-alpine");
     let mods = await getMods(inputs.version);
 
     let binds: string[] = [];
