@@ -1,10 +1,22 @@
-name: typescript-action
-description: Template of TypeScript Action
+name: minecraft-gametest-action
+description: An action to execute minecraft gametests for mods
 
 inputs:
-  name:
-    description: example input
+  version:
+    description: "Version of minecraft"
     required: true
+    default: 'LATEST'
+  
+  modPath:
+    description: "Path of the mod folder"
+    required: true
+
+  configPath:
+    description: "Path of the config folder"
+
+  serverPropertiesPath:
+    description: "Path of the server properties file"
+    
 
 runs:
   using: 'node20'

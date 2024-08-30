@@ -1,9 +1,13 @@
 import * as core from '@actions/core'
-import { run } from './run.js'
+import { run } from './app'
 
 const main = async (): Promise<void> => {
+  
   await run({
-    name: core.getInput('name', { required: true }),
+    version: core.getInput("version", {required: true}),
+    modPath: core.getInput("modPath", {required: true}),
+    serverPropertiesPath: core.getInput("serverPropertiesPath"),
+    configPath: core.getInput("configPath")
   })
 }
 
