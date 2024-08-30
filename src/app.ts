@@ -34,17 +34,14 @@ async function getMods(mcVersion: string) {
     return dependenciesJars.concat([`https://modmaven.dev/net/fabricmc/fabric-api/fabric-api/${version}/fabric-api-${version}.jar`]);
 }
 
-async function runDocker(inputs: Inputs) : Promise<boolean> {
-    let dck = new Docker();
-    await dck.pull("itzg/minecraft-server:java21-alpine");
+async function runDocker(dck: any, inputs: Inputs): Promise<boolean> {
     let mods = await getMods(inputs.version);
-
     let binds: string[] = [];
     if (inputs.configPath) binds.push(`${inputs.configPath}:/config`);
     if (inputs.modPath) binds.push(`${inputs.modPath}:/mods`);
     if (inputs.serverPropertiesPath) binds.push(`${inputs.serverPropertiesPath}:/data/server.properties`)
 
-    let env = ["EULA=true", `VERSION=${inputs.version}`, "TYPE=FABRIC", `MODS=${mods.join(",")}`, "JVM_OPTS=-Dfabric-api.gametest"]    
+    let env = ["EULA=true", `VERSION=${inputs.version}`, "TYPE=FABRIC", `MODS=${mods.join(",")}`, "JVM_OPTS=-Dfabric-api.gametest"]
     if (inputs.serverPropertiesPath) env.push("SKIP_SERVER_PROPERTIES=true")
 
     let res = await dck.run('itzg/minecraft-server:java21-alpine', [], process.stdout, {
@@ -68,5 +65,14 @@ interface Inputs {
 }
 
 module.exports = async function run(inputs: Inputs): Promise<boolean> {
-    return await runDocker(inputs)
+    let dck = new Docker();
+    return new Promise(res => {
+        dck.pull("itzg/minecraft-server:java21-alpine", (err : any, stream: any) => {
+            dck.modem.followProgress(stream, onFinished, () => { });
+
+            async function onFinished(err: any, output : any) {
+                res(await runDocker(dck, inputs))
+            }
+        });
+    })
 }
